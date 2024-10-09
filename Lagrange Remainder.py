@@ -18,7 +18,7 @@ def polynomial_interpolation(x_var, y, z):
    for k in range(z + 1):
        # Lagrange Polynomial
        p += y[k] * l_func(x_var, k, z)
-   return p
+   return simplify(p)
 
 
 def main():
