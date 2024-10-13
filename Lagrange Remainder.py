@@ -40,7 +40,7 @@ def Lagrange_remainder(function, x_var):
     return error_expression
 
 
-def graph_plot(x, y_data, polynomial, remainder):
+def graph_plot(x, y_data, polynomial, remainder, function):
     plt.figure("Polynomial Interpolation", figsize=(11, 8))
     plt.grid()
     plt.xlabel("X-axis", fontsize=12)
@@ -55,10 +55,13 @@ def graph_plot(x, y_data, polynomial, remainder):
     # Calculate y values for the polynomial and the remainder
     y_values_poly = [polynomial.subs("x", val) for val in x_values]
     y_values_rem = [remainder.subs("x", val) for val in x_values]
+    y_values_function = [function.subs("x", val) for val in x_values]
 
     # Convert expressions into floats
     y_values_poly = [float(val) for val in y_values_poly]
     y_values_rem = [float(val) for val in y_values_rem]
+    y_values_function = [float(val) for val in y_values_function]
+
 
     # Plot limits
     x_min, x_max = min(x_values), max(x_values)
@@ -70,8 +73,10 @@ def graph_plot(x, y_data, polynomial, remainder):
     plt.ylim(y_min - y_padding, y_max + y_padding)
 
     # Graph plot
-    plt.plot(x_values, y_values_poly, label='Interpolating Polynomial', color='blue', linestyle='-')
-    plt.plot(x_values, y_values_rem, label='Lagrange Remainder', color='red', linestyle='--')
+    plt.plot(x_values, y_values_poly, label="Interpolating Polynomial", color="blue", linestyle="-")
+    plt.plot(x_values, y_values_rem, label="Lagrange Remainder", color="red", linestyle="--")
+    plt.plot(x_values, y_values_function, label=f"{function}", color="black", linestyle="-")
+
 
     plt.gcf().canvas.manager.toolbar.zoom()
     plt.legend()
@@ -99,7 +104,7 @@ def main():
         y_data.append(y_var)
     polynomial = polynomial_interpolation(x_data, y_data)
     error_expression = Lagrange_remainder(function, x_data)
-    graph_plot(x_data, y_data, polynomial, error_expression)
+    graph_plot(x_data, y_data, polynomial, error_expression, function)
 
 
 main()
