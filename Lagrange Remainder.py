@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import sympy as sp
 from numpy import linspace
+import math
+from fractions import Fraction
 
 
 def l_func(x_values, k, x):
@@ -38,9 +40,14 @@ def Lagrange_remainder(function, x_var):
 
 
 def graph_plot(x, y_data, polynomial, remainder, function):
-    # Ensure that x values are numerical by evaluating them
+    # Convert x to a number
     try:
-        x_numeric = [float(val) if isinstance(val, (int, float)) else float(val.evalf()) for val in x]
+        x_numeric = []
+        for val in x:
+            if isinstance(val, sp.Basic):
+                x_numeric.append(float(val.evalf()))
+            else:
+                x_numeric.append(float(val))
     except Exception as e:
         print(f"Error converting x values to float: {e}")
         return
@@ -57,57 +64,59 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     # x values for plotting
     x_values = linspace(min(x_numeric), max(x_numeric), 750)
 
-    # Calculate y values for the polynomial and the remainder
-    y_values_poly = [float(polynomial.evalf(subs={"x": val})) for val in x_values]
-    y_values_rem = [float(sum(r.evalf(subs={"x": val}) for r in remainder)) for val in x_values]
-    y_values_function = [float(function.evalf(subs={"x": val})) for val in x_values]
+    # Plot the original function
+    y_original = [float(function.subs(sp.symbols("x"), val).evalf()) for val in x_values]
+    plt.plot(x_values, y_original, label=f"f(x) = {function}", color="black", linewidth=2)
 
-    # Plot limits
-    x_min, x_max = min(x_values), max(x_values)
-    y_min = min(min(y_values_poly), min(y_values_function))
-    y_max = max(max(y_values_poly), max(y_values_function))
-    x_padding = (x_max - x_min) * 0.1
-    y_padding = (y_max - y_min) * 0.1
-    plt.xlim(x_min - x_padding, x_max + x_padding)
-    plt.ylim(y_min - y_padding, y_max + y_padding)
+    # Plot the interpolated polynomial
+    y_polynomial = [float(polynomial.subs(sp.symbols("x"), val).evalf()) for val in x_values]
+    plt.plot(x_values, y_polynomial, label="Interpolated Polynomial", color="blue", linewidth=2)
 
-    # Graph plot
-    plt.plot(x_values, y_values_poly, label="Interpolating Polynomial", color="blue", linestyle="-")
-    plt.plot(x_values, y_values_rem, label="Lagrange Remainder", color="red", linestyle="--")
-    plt.plot(x_values, y_values_function, label=f"f(x) = {function}", color="black", linestyle="-")
+    # Plot the Lagrange remainder (sum of remainder terms)
+    y_remainder = [float(sum([r.subs(sp.symbols("x"), val).evalf() for r in remainder])) for val in x_values]
+    plt.plot(x_values, y_remainder, label="Lagrange Remainder", color="red", linewidth=2)
 
-    plt.gcf().canvas.manager.toolbar.zoom()
-    plt.legend()
+    plt.scatter(x_numeric, [float(val.evalf()) for val in y_data], label="Data Points", color="red", marker="o")
+    plt.legend(loc="best")
     plt.show()
 
 
 def main():
     x = sp.symbols("x")
-    function_input = input("Insert a function in terms of x (e.g 2x^3+ 3x^2 - 4x + 3): ")
-    # Verification for invalid functions
+    function_input = input("Insert a function in terms of x (e.g 2x^3 + 3x^2 - 4x + 3): ")
     try:
         function = sp.sympify(function_input)
     except Exception as e:
         print(f"Invalid function! {e}")
         return
     print(f"Function accepted: f(x) = {function}")
+
     # Gather x, y data from user
-    data_points = int(input("Number of points of interpolated function: "))
+    data_points = int(input("Number of points of interpolated polynomial: "))
     x_data = []
     y_data = []
+
     for i in range(data_points):
         x_var = input(f"x[{i + 1}]: ")
+        # Allows input to be irrational values such as e or pi and fractions
         try:
-            x_val = sp.sympify(x_var)
-            x_data.append(sp.N(x_val))
-            # Calculate the corresponding y value
-            y_val = function.subs(x, x_val)
-            # Ensure that y is a real number
-            y_val_eval = y_val.evalf()
-            y_data.append(sp.N(y_val_eval))
+            if "/" in x_var:
+                x_value = float(Fraction(x_var))
+            else:
+                allowed_names = {"e": math.e, "pi": math.pi, "Fraction": Fraction}
+                x_value = eval(x_var, {"__builtins__": None}, allowed_names)
+
+            # Calculate y values
+            x_sym = sp.sympify(x_value)
+            y_value = function.subs(x, x_sym).evalf()
+
+            x_data.append(x_sym)
+            y_data.append(y_value)
+        # Evaluate errors
         except (ValueError, SyntaxError) as e:
             print(f"Error: {x_var} is not a valid input. {e}")
-            continue
+            return
+
     polynomial = polynomial_interpolation(x_data, y_data)
     error_y_data = Lagrange_remainder(function, x_data)
     graph_plot(x_data, y_data, polynomial, error_y_data, function)
