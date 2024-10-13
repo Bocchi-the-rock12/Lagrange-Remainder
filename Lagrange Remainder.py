@@ -42,6 +42,7 @@ def Lagrange_remainder(function, x_var):
 
 
 def graph_plot(x, y_data, polynomial, remainder, function):
+    # Window set
     plt.figure("Polynomial Interpolation", figsize=(11, 8))
     plt.grid()
     plt.xlabel("X-axis", fontsize=12)
