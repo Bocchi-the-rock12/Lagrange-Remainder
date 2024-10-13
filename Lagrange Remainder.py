@@ -38,6 +38,13 @@ def Lagrange_remainder(function, x_var):
 
 
 def graph_plot(x, y_data, polynomial, remainder, function):
+    # Ensure that x values are numerical by evaluating them
+    try:
+        x_numeric = [float(val) if isinstance(val, (int, float)) else float(val.evalf()) for val in x]
+    except Exception as e:
+        print(f"Error converting x values to float: {e}")
+        return
+
     # Window set
     plt.figure("Polynomial Interpolation", figsize=(11, 8))
     plt.grid()
@@ -48,16 +55,12 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     plt.axvline(0, color="black", linewidth=2, ls="-")
 
     # x values for plotting
-    x_values = linspace(min(x), max(x), 750)
+    x_values = linspace(min(x_numeric), max(x_numeric), 750)
 
     # Calculate y values for the polynomial and the remainder
-    y_values_poly = [polynomial.subs("x", val) for val in x_values]
-    y_values_rem = [sum(r.subs("x", val) for r in remainder) for val in x_values]  # Calculate remainder
-    y_values_function = [function.subs("x", val) for val in x_values]
-
-    # Convert expressions into floats
-    y_values_poly = [float(val) for val in y_values_poly]
-    y_values_function = [float(val) for val in y_values_function]
+    y_values_poly = [float(polynomial.evalf(subs={"x": val})) for val in x_values]
+    y_values_rem = [float(sum(r.evalf(subs={"x": val}) for r in remainder)) for val in x_values]
+    y_values_function = [float(function.evalf(subs={"x": val})) for val in x_values]
 
     # Plot limits
     x_min, x_max = min(x_values), max(x_values)
@@ -93,10 +96,18 @@ def main():
     x_data = []
     y_data = []
     for i in range(data_points):
-        x_var = float(input(f"x[{i+1}]: "))
-        x_data.append(x_var)
-        y_var = function.subs(x, x_var)
-        y_data.append(y_var)
+        x_var = input(f"x[{i + 1}]: ")
+        try:
+            x_val = sp.sympify(x_var)
+            x_data.append(sp.N(x_val))
+            # Calculate the corresponding y value
+            y_val = function.subs(x, x_val)
+            # Ensure that y is a real number
+            y_val_eval = y_val.evalf()
+            y_data.append(sp.N(y_val_eval))
+        except (ValueError, SyntaxError) as e:
+            print(f"Error: {x_var} is not a valid input. {e}")
+            continue
     polynomial = polynomial_interpolation(x_data, y_data)
     error_y_data = Lagrange_remainder(function, x_data)
     graph_plot(x_data, y_data, polynomial, error_y_data, function)
