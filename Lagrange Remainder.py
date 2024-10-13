@@ -1,26 +1,22 @@
 import matplotlib.pyplot as plt
 import sympy as sp
 from numpy import linspace
-import numdifftools as nd
 
 
-def l_func(x_values, k):
+def l_func(x_values, k, x):
     l = 1
     degree = len(x_values) - 1
-    x = sp.symbols("x")
-    # Calculation of the l node polynomials
     for i in range(degree + 1):
         if i != k:
             l *= (x - x_values[i]) / (x_values[k] - x_values[i])
     return l
 
-
-def polynomial_interpolation(x, y):
+def polynomial_interpolation(x_values, y_values):
+    x = sp.symbols("x")
     p = 0
-    degree = len(x) - 1
+    degree = len(x_values) - 1
     for k in range(degree + 1):
-        # Lagrange Polynomial calculation
-        p += y[k] * l_func(x, k)
+        p += y_values[k] * l_func(x_values, k, x)
     return p
 
 
@@ -29,14 +25,13 @@ def Lagrange_remainder(function, x_var):
     degree = len(x_var) - 1
     fact = sp.factorial(degree + 1)
     error_values = []
-    numeric_function = sp.lambdify(x, function, "numpy")
+    derivative = sp.diff(function, x, degree + 1)
     for m in range(degree + 1):
         product = 1
         for i in range(degree + 1):
             if i != m:
                 product *= (x - x_var[i])
-        point_derivative = nd.Derivative(numeric_function)(x_var[m])
-        error = (point_derivative / fact) * product
+        error = (derivative / fact) * product
         error_values.append(error)
     return error_values
 
@@ -96,8 +91,8 @@ def main():
     data_points = int(input("Number of points of interpolated function: "))
     x_data = []
     y_data = []
-    for x in range(data_points):
-        x_var = float(input(f"x[{x}]: "))
+    for i in range(data_points):
+        x_var = float(input(f"x[{i+1}]: "))
         x_data.append(x_var)
         y_var = function.subs(x, x_var)
         y_data.append(y_var)
