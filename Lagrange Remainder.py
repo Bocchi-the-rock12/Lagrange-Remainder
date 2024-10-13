@@ -64,7 +64,7 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     # x values for plotting
     x_values = linspace(min(x_numeric), max(x_numeric), 750)
 
-    # Plot the original function
+    # Plot f(x)
     y_original = [float(function.subs(sp.symbols("x"), val).evalf()) for val in x_values]
     plt.plot(x_values, y_original, label=f"f(x) = {function}", color="black", linewidth=2)
 
@@ -72,7 +72,7 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     y_polynomial = [float(polynomial.subs(sp.symbols("x"), val).evalf()) for val in x_values]
     plt.plot(x_values, y_polynomial, label="Interpolated Polynomial", color="blue", linewidth=2)
 
-    # Plot the Lagrange remainder (sum of remainder terms)
+    # Plot Lagrange remainder
     y_remainder = [float(sum([r.subs(sp.symbols("x"), val).evalf() for r in remainder])) for val in x_values]
     plt.plot(x_values, y_remainder, label="Lagrange Remainder", color="red", linewidth=2)
 
@@ -84,6 +84,7 @@ def graph_plot(x, y_data, polynomial, remainder, function):
 def main():
     x = sp.symbols("x")
     function_input = input("Insert a function in terms of x (e.g 2x^3 + 3x^2 - 4x + 3): ")
+    # Handles invalid input
     try:
         function = sp.sympify(function_input)
     except Exception as e:
