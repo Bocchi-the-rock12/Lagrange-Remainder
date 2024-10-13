@@ -51,6 +51,7 @@
   "keyToString": {
     "Python.Lagrange Remainder.executor": "Run",
     "Python.alg_proper_com_func_2_0.executor": "Run",
+    "Python.alg_proper_com_func_4_0.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
@@ -152,7 +153,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728838317028</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="em principio está correto">
+      <option name="closed" value="true" />
+      <created>1728845753881</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1728845753881</updated>
+    </task>
+    <task id="LOCAL-00012" summary="em principio está correto">
+      <option name="closed" value="true" />
+      <created>1728845880750</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1728845880750</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

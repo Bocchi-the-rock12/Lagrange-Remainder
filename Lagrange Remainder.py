@@ -34,7 +34,7 @@ def Lagrange_remainder(function, x_var):
         for i in range(degree + 1):
             if i != m:
                 product *= (x - x_var[i])
-        error = (derivative / fact) * product
+        error = abs((derivative / fact) * product)
         error_values.append(error)
     return error_values
 
