@@ -8,7 +8,7 @@ def l_func(x_values, k):
     l = 1
     degree = len(x_values) - 1
     x = sp.symbols("x")
-    # Calculation of l node polynomials
+    # Calculation of the l node polynomials
     for i in range(degree + 1):
         if i != k:
             l *= (x - x_values[i]) / (x_values[k] - x_values[i])
@@ -28,7 +28,7 @@ def Lagrange_remainder(function, x_var):
     x = sp.symbols("x")
     degree = len(x_var) - 1
     fact = sp.factorial(degree + 1)
-    error_expression = 0
+    error_values = []
     numeric_function = sp.lambdify(x, function, "numpy")
     for m in range(degree + 1):
         product = 1
@@ -36,8 +36,9 @@ def Lagrange_remainder(function, x_var):
             if i != m:
                 product *= (x - x_var[i])
         point_derivative = nd.Derivative(numeric_function)(x_var[m])
-        error_expression += (point_derivative / fact) * product
-    return error_expression
+        error = (point_derivative / fact) * product
+        error_values.append(error)
+    return error_values
 
 
 def graph_plot(x, y_data, polynomial, remainder, function):
@@ -54,19 +55,17 @@ def graph_plot(x, y_data, polynomial, remainder, function):
 
     # Calculate y values for the polynomial and the remainder
     y_values_poly = [polynomial.subs("x", val) for val in x_values]
-    y_values_rem = [remainder.subs("x", val) for val in x_values]
+    y_values_rem = [sum(r.subs("x", val) for r in remainder) for val in x_values]  # Calculate remainder
     y_values_function = [function.subs("x", val) for val in x_values]
 
     # Convert expressions into floats
     y_values_poly = [float(val) for val in y_values_poly]
-    y_values_rem = [float(val) for val in y_values_rem]
     y_values_function = [float(val) for val in y_values_function]
-
 
     # Plot limits
     x_min, x_max = min(x_values), max(x_values)
-    y_min = min(min(y_values_poly), min(y_values_rem))
-    y_max = max(max(y_values_poly), max(y_values_rem))
+    y_min = min(min(y_values_poly), min(y_values_function))
+    y_max = max(max(y_values_poly), max(y_values_function))
     x_padding = (x_max - x_min) * 0.1
     y_padding = (y_max - y_min) * 0.1
     plt.xlim(x_min - x_padding, x_max + x_padding)
@@ -75,8 +74,7 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     # Graph plot
     plt.plot(x_values, y_values_poly, label="Interpolating Polynomial", color="blue", linestyle="-")
     plt.plot(x_values, y_values_rem, label="Lagrange Remainder", color="red", linestyle="--")
-    plt.plot(x_values, y_values_function, label=f"{function}", color="black", linestyle="-")
-
+    plt.plot(x_values, y_values_function, label=f"f(x) = {function}", color="black", linestyle="-")
 
     plt.gcf().canvas.manager.toolbar.zoom()
     plt.legend()
@@ -103,8 +101,8 @@ def main():
         y_var = function.subs(x, x_var)
         y_data.append(y_var)
     polynomial = polynomial_interpolation(x_data, y_data)
-    error_expression = Lagrange_remainder(function, x_data)
-    graph_plot(x_data, y_data, polynomial, error_expression, function)
+    error_y_data = Lagrange_remainder(function, x_data)
+    graph_plot(x_data, y_data, polynomial, error_y_data, function)
 
 
 main()
