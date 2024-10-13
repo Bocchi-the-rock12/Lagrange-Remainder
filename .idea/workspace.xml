@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3773f6f8-b0b2-48c8-b43c-6ce09fc38bc0" name="Changes" comment="olá">
+    <list default="true" id="3773f6f8-b0b2-48c8-b43c-6ce09fc38bc0" name="Changes" comment="em principio está correto">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lagrange Remainder.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lagrange Remainder.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,11 +127,20 @@
       <option name="project" value="LOCAL" />
       <updated>1728832176970</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="em principio está correto">
+      <option name="closed" value="true" />
+      <created>1728833495106</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1728833495106</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="olá" />
-    <option name="LAST_COMMIT_MESSAGE" value="olá" />
+    <MESSAGE value="em principio está correto" />
+    <option name="LAST_COMMIT_MESSAGE" value="em principio está correto" />
   </component>
 </project>

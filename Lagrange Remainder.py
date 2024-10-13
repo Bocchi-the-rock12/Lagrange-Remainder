@@ -11,6 +11,7 @@ def l_func(x_values, k, x):
             l *= (x - x_values[i]) / (x_values[k] - x_values[i])
     return l
 
+
 def polynomial_interpolation(x_values, y_values):
     x = sp.symbols("x")
     p = 0
