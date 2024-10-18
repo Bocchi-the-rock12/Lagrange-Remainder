@@ -52,8 +52,11 @@
     "Python.Lagrange Remainder.executor": "Run",
     "Python.alg_proper_com_func_2_0.executor": "Run",
     "Python.alg_proper_com_func_4_0.executor": "Run",
+    "Python.metodo_lagrange_2.executor": "Run",
+    "Python.resto_de_lagrange.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Ferreira/Downloads/resto_de_lagrange.py",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
@@ -169,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728845880750</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="em principio está correto">
+      <option name="closed" value="true" />
+      <created>1728846504429</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1728846504429</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

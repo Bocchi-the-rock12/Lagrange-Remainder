@@ -39,7 +39,7 @@ def Lagrange_remainder(function, x_var):
     return error_values
 
 
-def graph_plot(x, y_data, polynomial, remainder, function):
+def graph_plot(x, y_data, polynomial, function):
     # Convert x to a number
     try:
         x_numeric = []
@@ -72,9 +72,6 @@ def graph_plot(x, y_data, polynomial, remainder, function):
     y_polynomial = [float(polynomial.subs(sp.symbols("x"), val).evalf()) for val in x_values]
     plt.plot(x_values, y_polynomial, label="Interpolated Polynomial", color="blue", linewidth=2)
 
-    # Plot Lagrange remainder
-    y_remainder = [float(sum([r.subs(sp.symbols("x"), val).evalf() for r in remainder])) for val in x_values]
-    plt.plot(x_values, y_remainder, label="Lagrange Remainder", color="red", linewidth=2)
 
     plt.scatter(x_numeric, [float(val.evalf()) for val in y_data], label="Data Points", color="red", marker="o")
     plt.legend(loc="best")
@@ -110,17 +107,16 @@ def main():
             # Calculate y values
             x_sym = sp.sympify(x_value)
             y_value = function.subs(x, x_sym).evalf()
-
             x_data.append(x_sym)
             y_data.append(y_value)
+
         # Evaluate errors
         except (ValueError, SyntaxError) as e:
             print(f"Error: {x_var} is not a valid input. {e}")
             return
 
     polynomial = polynomial_interpolation(x_data, y_data)
-    error_y_data = Lagrange_remainder(function, x_data)
-    graph_plot(x_data, y_data, polynomial, error_y_data, function)
+    graph_plot(x_data, y_data, polynomial, function)
 
 
 main()
